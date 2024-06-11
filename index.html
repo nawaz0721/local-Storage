@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="login_container" class="show">
+        <div class="form">
+          <h2>Login</h2>
+          <div class="input-field">
+            <input type="email" id="email" />
+            <label>Enter your email</label>
+          </div>
+          <div class="input-field">
+            <input type="password" id="password" />
+            <label>Enter your password</label>
+          </div>
+          <div class="forget">
+            <label for="remember">
+              <input type="checkbox" id="remember" />
+              <p>Remember me</p>
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+          <button onclick="loginUser()">Log In <i class="fa-solid fa-right-to-bracket"></i></button>
+          <div class="register">
+            <p>Don't have an account? <a href="#">Signup</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="home_container">
+          <h1>Welcome to To-do List </h1>
+        <div class="user">
+          <span style="display: flex; justify-content: center;"> <i class="fa-solid fa-user"></i> &nbsp&nbsp <p id="user_email"></p></span>
+          <button onclick="logout()">Logout <i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      
+        <div class="container">
+            <div id="new-task">
+                <input type="text" id="userInput" placeholder="Enter The Task Here..." />
+                <select id="category">
+                    <option value="Home">Home</option>
+                    <option value="Office">Office</option>
+                    <option value="Study">Study</option>
+                </select>
+                <button id="push" onclick="addTask()">Add</button>
+            </div>
+            <div id="task">
+                <div id="tasks"></div>
+            </div>
+        </div>
+      </div>
+      <script src="script.js"></script>
+</body>
+</html>
