@@ -41,7 +41,7 @@
     display: none;
   }
  #home_container {
-    width: 530px;
+    width: 70%;
     border-radius: 12px;
     padding: 30px;
     text-align: center;
@@ -200,8 +200,8 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    width: 530px;
-    max-height: 400px;
+    width: 100%;
+    height: 400px;
     z-index: 1;
     background: rgba(0, 0, 0, 0.85);
     overflow-y: hidden;
@@ -227,6 +227,19 @@
   }
   
   #new-task select {
+    width: 25%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    border: 2px solid #aaa;
+    /* background: rgba(255, 255, 255, 0.1); */
+    background-color: black;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  #filter-category {
     width: 25%;
     padding: 10px;
     border-radius: 8px;
@@ -277,6 +290,7 @@
     border-radius: 8px;
     list-style: none;
     color: #fff;
+    max-width: 100%;
   }
   
   #tasks li span {

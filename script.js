@@ -4,11 +4,12 @@ var user_email = document.getElementById('user_email');
 var email = document.getElementById('email');
 var password = document.getElementById('password');
 var input = document.getElementById('userInput');
-var category = document.getElementById('category');
-var clicksHistory = document.getElementById('tasks');
+var newCategory = document.getElementById('new-category');
+var filterCategory = document.getElementById('filter-category');
+var taskTableBody = document.getElementById('tasks').querySelector('tbody');
 
-function loginUser(){
-    if(!email.value || !password.value){
+function loginUser() {
+    if (!email.value || !password.value) {
         alert("Please fill in all fields");
         return;
     }
@@ -41,97 +42,102 @@ function addTask() {
     var email = localStorage.getItem("email");
     var now = new Date();
 
-    var obj = {
+    var task = {
         email: email,
         input: input.value,
-        category: category.value,
+        category: newCategory.value,
         date: now.getMonth() + 1 + "/" + now.getDate() + "/" + now.getFullYear(),
         time: now.toLocaleTimeString()
     };
 
-    saveLocalstorage(obj);
+    saveLocalStorage(task);
     input.value = "";
 }
 
-function saveLocalstorage(obj){
+function saveLocalStorage(task) {
     var tasks = localStorage.getItem("tasks");
 
-    if(tasks){
+    if (tasks) {
         tasks = JSON.parse(tasks);
-        tasks.push(obj);
+        tasks.push(task);
         localStorage.setItem("tasks", JSON.stringify(tasks));
     } else {
-        tasks = [obj];
+        tasks = [task];
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }
     displayTodo();
 }
 
-function displayTodo(){
+function displayTodo() {
     var tasks = localStorage.getItem("tasks");
     var email = localStorage.getItem("email");
-    var selectedCategory = category.value;
+    var selectedCategory = filterCategory.value;
 
-    if(tasks){
-        clicksHistory.innerHTML = "";
+    if (tasks) {
+        taskTableBody.innerHTML = "";
         tasks = JSON.parse(tasks);
 
-        tasks.forEach(function (data) {
-            if((data.email === email || email === 'admin@gmail.com') && data.category === selectedCategory){
-                var li = `<li> <span class="category">${data.category}</span><span> ${data.input} </span>
-                <div>
-                <span>${data.date}</span><br>
-                <span>${data.time}</span>
-                </div>
-                <button onclick="editThis(this)" id="edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button onclick="deleteThis(this)" id="delete"><i class="fa-solid fa-trash"></i ></button> </li>`;
-                
-                if(email === 'admin@gmail.com'){
-                    li = `<li><span>${data.email}</span>` + li.slice(4);
-                }
-                clicksHistory.innerHTML += li;
+        tasks.forEach(function (task) {
+            if ((task.email === email || email === 'admin@gmail.com') && (selectedCategory === 'All' || task.category === selectedCategory)) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = `<td>${task.email}</td>
+                                <td>${task.category}</td>
+                                <td>${task.input}</td>
+                                <td>${task.date}</td>
+                                <td>${task.time}</td>
+                                <td><button onclick="editTask(this)"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                                <td><button onclick="deleteTask(this)"><i class="fa-solid fa-trash"></i></button></td>`;
+                taskTableBody.appendChild(tr);
             }
         });
     }
 }
 
-category.addEventListener('change', displayTodo);
+filterCategory.addEventListener('change', displayTodo);
 displayTodo();
 
-function editThis(currentElement){
-    var taskElement = currentElement.parentElement;
-    var taskText = taskElement.querySelector('span:not(.category)').innerText;
+function editTask(button) {
+    var tr = button.parentElement.parentElement;
+    var taskText = tr.children[2].innerText;
     var newText = prompt("Edit your task:", taskText);
-    if(newText){
-        taskElement.querySelector('span:not(.category)').innerText = newText;
-
-        // Update local storage
-        var tasks = localStorage.getItem("tasks");
-        if(tasks){
-            tasks = JSON.parse(tasks);
-            tasks.forEach(function(data){
-                if(data.input === taskText) {
-                    data.input = newText;
-                }
-            });
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-        }
+    
+    if (newText) {
+        tr.children[2].innerText = newText;
+        updateLocalStorage(tr, newText);
     }
 }
 
-function deleteThis(currentElement){
-    // Remove from the DOM
-    var taskElement = currentElement.parentElement;
-    var taskText = taskElement.querySelector('span:not(.category)').innerText;
-    taskElement.remove();
+function updateLocalStorage(tr, newText) {
+    var tasks = JSON.parse(localStorage.getItem("tasks"));
+    var email = tr.children[0].innerText;
+    var category = tr.children[1].innerText;
+    var date = tr.children[3].innerText;
+    var time = tr.children[4].innerText;
 
-    // Remove from local storage
-    var tasks = localStorage.getItem("tasks");
-    if(tasks){
-        tasks = JSON.parse(tasks);
-        tasks = tasks.filter(function(data){
-            return data.input !== taskText;
-        });
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
+    tasks.forEach(task => {
+        if (task.email === email && task.category === category && task.date === date && task.time === time) {
+            task.input = newText;
+        }
+    });
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function deleteTask(button) {
+    var tr = button.parentElement.parentElement;
+    tr.remove();
+    removeLocalStorage(tr);
+}
+
+function removeLocalStorage(tr) {
+    var tasks = JSON.parse(localStorage.getItem("tasks"));
+    var email = tr.children[0].innerText;
+    var category = tr.children[1].innerText;
+    var taskText = tr.children[2].innerText;
+    var date = tr.children[3].innerText;
+    var time = tr.children[4].innerText;
+
+    tasks = tasks.filter(task => !(task.email === email && task.category === category && task.input === taskText && task.date === date && task.time === time));
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }

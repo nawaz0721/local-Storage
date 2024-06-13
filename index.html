@@ -13,11 +13,11 @@
         <div class="form">
           <h2>Login</h2>
           <div class="input-field">
-            <input type="email" id="email" />
+            <input type="email" id="email" required />
             <label>Enter your email</label>
           </div>
           <div class="input-field">
-            <input type="password" id="password" />
+            <input type="password" id="password" required />
             <label>Enter your password</label>
           </div>
           <div class="forget">
@@ -43,16 +43,39 @@
       
         <div class="container">
             <div id="new-task">
-                <input type="text" id="userInput" placeholder="Enter The Task Here..." />
-                <select id="category">
+                <input type="text" id="userInput" placeholder="Enter The Task Here..." required />
+                <select id="new-category">
                     <option value="Home">Home</option>
                     <option value="Office">Office</option>
                     <option value="Study">Study</option>
                 </select>
                 <button id="push" onclick="addTask()">Add</button>
             </div>
+            <select id="filter-category">
+              <option value="All">All</option>
+              <option value="Home">Home</option>
+              <option value="Office">Office</option>
+              <option value="Study">Study</option>
+            </select>
             <div id="task">
-                <div id="tasks"></div>
+                <div id="tasks">
+                  <table id="head">
+                    <thead>
+                      <tr>
+                        <th>Email</th>
+                        <th>Category</th>
+                        <th>Task</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Tasks will be dynamically added here -->
+                    </tbody>
+                  </table>
+                </div>
             </div>
         </div>
       </div>
